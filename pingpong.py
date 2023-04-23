@@ -32,7 +32,7 @@ class Player(GameSprite):
 
 
 #игровая сцена:
-back = (200, 255, 255) #цвет фона (background)
+back = (255, 255, 255)
 win_width = 600
 win_height = 500
 window = display.set_mode((win_width, win_height))
@@ -51,15 +51,19 @@ racket1 = Player('racket.png', 30, 200, 4, 50, 150)
 racket2 = Player('racket.png', 520, 200, 4, 50, 150)
 ball = GameSprite('tenis_ball.png', 200, 200, 4, 50, 50)
 
+score1 = 0
+score2 = 0
 
 font.init()
 font = font.Font(None, 35)
 lose1 = font.render('PLAYER 1 LOSE!', True, (180, 0, 0))
 lose2 = font.render('PLAYER 2 LOSE!', True, (180, 0, 0))
+score = font.render(str(score1)+':'+str(score2), True, (180, 0, 0))
 
 
 speed_x = 3
 speed_y = 3
+
 
 
 while game:
@@ -86,22 +90,27 @@ while game:
 
        #если мяч улетел дальше ракетки, выводим условие проигрыша для первого игрока
        if ball.rect.x < 0:
-           finish = True
-           window.blit(lose1, (200, 200))
-           game_over = True
+           score2 += 1
+           score = font.render(str(score1)+':'+str(score2), True, (180, 0, 0))
+           window.blit(score, (200, 200))
+           ball.rect.x = 300
+           ball.rect.y = 250
+
 
 
        #если мяч улетел дальше ракетки, выводим условие проигрыша для второго игрока
        if ball.rect.x > win_width:
-           finish = True
-           window.blit(lose2, (200, 200))
-           game_over = True
+           score1 += 1
+           score = font.render(str(score1)+':'+str(score2), True, (180, 0, 0))
+           window.blit(score, (200, 200))
+           ball.rect.x = 300
+           ball.rect.y = 250
 
 
        racket1.reset()
        racket2.reset()
        ball.reset()
 
-
+   window.blit(score, (200, 200))
    display.update()
    clock.tick(FPS)
